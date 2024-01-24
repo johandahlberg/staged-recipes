@@ -14,20 +14,6 @@ source:
     folder: graspologic-native
 
 build:
-  noarch: python
-  script: |
-    cd graspologic-native
-    cd ./packages/pyo3/
-    maturin build --release -i  {{ PYTHON }}
-    cd -
-
-    echo "Install graspologic native wheel"
-    {{ PYTHON }} -m pip install -vv --no-deps --no-build-isolation target/wheels/graspologic_native-*.whl
-
-    cd ..
-    echo "Install graspologic"
-    cd graspologic
-    {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
 
 requirements:
@@ -36,9 +22,13 @@ requirements:
     - setuptools >=24.2.0
     - pip
   build:
-    - rust
-    - maturin
-    - pip
+    - python                                  # [build_platform != target_platform]
+    - cross-python_{{ target_platform }}      # [build_platform != target_platform] 
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('rust') }}
+    - maturin    
+
   run:
     - python >=3.8,<3.12
     - anytree >=2.8.0
