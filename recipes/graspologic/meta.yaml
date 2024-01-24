@@ -6,17 +6,17 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/graspologic-{{ version }}.tar.gz
-  sha256: 08fe052694a027995b3222d01d8cb64e1bf242e7915a5016268927c64f6229fc
+  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/graspologic-{{ version }}.tar.gz
+    sha256: 08fe052694a027995b3222d01d8cb64e1bf242e7915a5016268927c64f6229fc
+    folder: graspologic
+  - url: https://github.com/microsoft/graspologic-native/archive/refs/tags/1.2.1-dev202401237632992366.tar.gz
+    sha256: 1bd82a22e0c0fac8dd1fb92aaf1bcbfc21bac3e7aa6d3fedea1a7d5043fe6151
+    folder: graspologic-native
 
 build:
   noarch: python
   script: |
-    # TODO Get from source instead!
-    echo "Build graspologic native"
-    git clone https://github.com/johandahlberg/graspologic-native.git
     cd graspologic-native
-    git checkout packaging-fixes
     cd ./packages/pyo3/
     maturin build --release -i  {{ PYTHON }}
     cd -
@@ -24,9 +24,9 @@ build:
     echo "Install graspologic native wheel"
     {{ PYTHON }} -m pip install -vv --no-deps --no-build-isolation target/wheels/graspologic_native-*.whl
 
-
-    echo "Install graspologic"
     cd ..
+    echo "Install graspologic"
+    cd graspologic
     {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
 
