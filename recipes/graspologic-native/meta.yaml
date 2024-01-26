@@ -17,6 +17,7 @@ requirements:
   host:
     - python >=3.6,<3.13
     - maturin >=1.4,<2.0
+    - rust
     - pip
   run:
     - python >=3.6,<3.13
