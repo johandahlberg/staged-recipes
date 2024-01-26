@@ -1,0 +1,41 @@
+{% set name = "graspologic-native" %}
+{% set version = "1.2.1" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/graspologic_native-{{ version }}.tar.gz
+  sha256: 72b7586028a91e9fef9af0ef314d368f0240c18dca99e6e6c546334359a8610a
+
+build:
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  number: 0
+
+requirements:
+  host:
+    - python >=3.6,<3.13
+    - maturin >=1.4,<2.0
+    - pip
+  run:
+    - python >=3.6,<3.13
+
+test:
+  imports:
+    - graspologic_native
+  commands:
+    - pip check
+  requires:
+    - pip
+
+about:
+  summary: Python native companion module to the graspologic library
+  license: MIT
+  license_file: LICENSE.txt
+
+extra:
+  recipe-maintainers:
+    - johandahlberg
+    - fbdtemme
+    - bdpedigo

@@ -6,14 +6,12 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/graspologic-{{ version }}.tar.gz
-    sha256: 08fe052694a027995b3222d01d8cb64e1bf242e7915a5016268927c64f6229fc
-    folder: graspologic
-  - url: https://github.com/microsoft/graspologic-native/archive/refs/tags/1.2.1-dev202401237632992366.tar.gz
-    sha256: 1bd82a22e0c0fac8dd1fb92aaf1bcbfc21bac3e7aa6d3fedea1a7d5043fe6151
-    folder: graspologic-native
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/graspologic-{{ version }}.tar.gz
+  sha256: 08fe052694a027995b3222d01d8cb64e1bf242e7915a5016268927c64f6229fc
 
 build:
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
 
 requirements:
@@ -21,19 +19,12 @@ requirements:
     - python >=3.8,<3.12
     - setuptools >=24.2.0
     - pip
-  build:
-    - python                                  # [build_platform != target_platform]
-    - cross-python_{{ target_platform }}      # [build_platform != target_platform] 
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - {{ compiler('rust') }}
-    - maturin    
-
   run:
     - python >=3.8,<3.12
     - anytree >=2.8.0
     - beartype >=0.10.0
     - gensim >=4.0.0,!=4.2.0
+    - graspologic-native >=1.1.1
     - hyppo >=0.3.2
     - joblib >=0.17.0
     - matplotlib-base >=3.0.0,!=3.3.*,!=3.6.1
@@ -65,5 +56,3 @@ about:
 extra:
   recipe-maintainers:
     - johandahlberg
-    - fbdtemme
-    - bdpedigo
